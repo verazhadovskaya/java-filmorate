@@ -1,4 +1,5 @@
 package ru.yandex.practicum.filmorate.model;
+
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.ToString;
@@ -19,7 +20,7 @@ public class User {
     private String login;
     private String name;
     @PastOrPresent
-        private LocalDate birthday;
+    private LocalDate birthday;
 }
 
 

@@ -44,6 +44,7 @@ public class UserControllerTest {
         Assertions.assertThrows(ValidationException.class, () -> userController.create(user));
         Assertions.assertEquals(0, userController.getUsers().size());
     }
+
     @Test
     void createUserNotValidLogin() {
         user.setLogin("");
@@ -54,7 +55,7 @@ public class UserControllerTest {
 
     @Test
     void createUserNotValidBirthday() {
-        user.setBirthday(LocalDate.of(2099,1,1));
+        user.setBirthday(LocalDate.of(2099, 1, 1));
 
         Assertions.assertThrows(ValidationException.class, () -> userController.create(user));
         Assertions.assertEquals(0, userController.getUsers().size());

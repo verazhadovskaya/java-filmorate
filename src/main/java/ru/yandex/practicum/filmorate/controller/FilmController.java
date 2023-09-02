@@ -8,6 +8,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import jakarta.validation.Valid;
+
 import java.time.LocalDate;
 import java.util.Map;
 
@@ -43,9 +44,9 @@ public class FilmController {
         if (film.getDescription().length() > 200 || film.getDescription().length() == 0) {
             throw new ValidationException("Описание фильма не может быть больше 200 символов");
         }
-            log.info("Вызов метода сохранения фильма", film);
-            filmService.saveFilm(film);
-         return film;
+        log.info("Вызов метода сохранения фильма", film);
+        filmService.saveFilm(film);
+        return film;
     }
 
     //обновление фильма

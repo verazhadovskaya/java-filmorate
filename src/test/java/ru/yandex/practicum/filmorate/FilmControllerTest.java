@@ -47,6 +47,7 @@ public class FilmControllerTest {
         Assertions.assertThrows(ValidationException.class, () -> filmController.create(film));
         Assertions.assertEquals(0, filmController.getFilm().size());
     }
+
     @Test
     void createFilmNotValidDescMore200() {
         film.setDescription("Очень длинное описание. Очень длинное описание. " +
@@ -94,7 +95,7 @@ public class FilmControllerTest {
 
     @Test
     void createUserNotValidBirthday() {
-        film.setReleaseDate(LocalDate.of(1800,1,1));
+        film.setReleaseDate(LocalDate.of(1800, 1, 1));
 
 
         Assertions.assertThrows(ValidationException.class, () -> filmController.create(film));
@@ -103,7 +104,7 @@ public class FilmControllerTest {
 
     @Test
     void createUserNotValidBirthdayBorderDayMinusDay() {
-        film.setReleaseDate(LocalDate.of(1895,12,27));
+        film.setReleaseDate(LocalDate.of(1895, 12, 27));
 
 
         Assertions.assertThrows(ValidationException.class, () -> filmController.create(film));
@@ -112,7 +113,7 @@ public class FilmControllerTest {
 
     @Test
     void createUserNotValidBirthdayBorderDay() {
-        film.setReleaseDate(LocalDate.of(1895,12,28));
+        film.setReleaseDate(LocalDate.of(1895, 12, 28));
         filmController.create(film);
 
         Assertions.assertEquals(1, filmController.getFilm().size());
@@ -120,7 +121,7 @@ public class FilmControllerTest {
 
     @Test
     void createUserNotValidBirthdayBorderPlusDay() {
-        film.setReleaseDate(LocalDate.of(1895,12,29));
+        film.setReleaseDate(LocalDate.of(1895, 12, 29));
         filmController.create(film);
 
         Assertions.assertEquals(1, filmController.getFilm().size());
