@@ -13,14 +13,15 @@ public class UserService {
 
     public User saveUser(User user) {
         user.setId(nextId++);
-        if (user.getName()==null){
+        if (user.getName() == null) {
             user.setName(user.getLogin());
         }
         users.put(user.getId(), user);
         return user;
     }
+
     public User updateUser(User user) {
-        if (user.getName()==null){
+        if (user.getName() == null) {
             user.setName(user.getLogin());
         }
         users.put(user.getId(), user);
