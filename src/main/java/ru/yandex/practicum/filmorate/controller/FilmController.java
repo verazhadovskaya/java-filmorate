@@ -14,7 +14,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/films")
+@RequestMapping("/films")
 public class FilmController {
 
     private final FilmService filmService = new FilmService();
