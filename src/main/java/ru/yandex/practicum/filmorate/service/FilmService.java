@@ -9,7 +9,7 @@ import java.util.Map;
 @Slf4j
 public class FilmService {
     private final Map<Long, Film> films = new HashMap<>();
-    private long nextId = 1;
+    private long nextId = 0;
 
     public Film saveFilm(Film film) {
         film.setId(nextId++);
