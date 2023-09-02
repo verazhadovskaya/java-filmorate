@@ -10,6 +10,8 @@ import ru.yandex.practicum.filmorate.service.UserService;
 import jakarta.validation.Valid;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -22,9 +24,9 @@ public class UserController {
     //получение всех пользователей
     @ResponseBody
     @GetMapping
-    public Map<Long, User> getUsers() {
+    public List<User> getUsers() {
         log.info("Текущее количество пользователей: {}", userService.getAllUser().size());
-        return userService.getAllUser();
+        return new ArrayList<>(userService.getAllUser().values());
     }
 
     //добавление нового пользователя

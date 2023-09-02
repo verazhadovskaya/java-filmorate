@@ -10,6 +10,8 @@ import ru.yandex.practicum.filmorate.service.FilmService;
 import jakarta.validation.Valid;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -22,9 +24,9 @@ public class FilmController {
     //получение всех фильмов
     @ResponseBody
     @GetMapping
-    public Map<Long, Film> getFilm() {
+    public List<Film> getFilm() {
         log.info("Текущее количество фильмов: {}", filmService.getAllFilm().size());
-        return filmService.getAllFilm();
+        return new ArrayList<>(filmService.getAllFilm().values());
     }
 
     //добавление нового фильма
