@@ -10,7 +10,6 @@ import java.util.Map;
 public class FilmService {
     private final Map<Long, Film> films = new HashMap<>();
     private long nextId = 1;
-
     public Film saveFilm(Film film) {
         film.setId(nextId++);
         films.put(film.getId(), film);
@@ -20,9 +19,7 @@ public class FilmService {
         films.put(film.getId(), film);
         return film;
     }
-
     public Map<Long, Film> getAllFilm() {
         return films;
     }
-
 }
