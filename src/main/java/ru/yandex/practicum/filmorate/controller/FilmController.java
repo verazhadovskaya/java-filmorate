@@ -24,8 +24,7 @@ public class FilmController {
     @ResponseBody
     @GetMapping
     public List<Film> getFilm() {
-        log.info("Текущее количество фильмов: {}", filmService.getAllFilm().size());
-        return new ArrayList<>(filmService.getAllFilm().values());
+        return filmService.getAllFilm();
     }
 
     //добавление нового фильма
@@ -45,7 +44,6 @@ public class FilmController {
         if (film.getDescription().length() > 200 || film.getDescription().length() == 0) {
             throw new ValidationException("Описание фильма не может быть больше 200 символов");
         }
-        log.info("Вызов метода сохранения фильма", film);
         filmService.saveFilm(film);
         return film;
     }
@@ -67,12 +65,7 @@ public class FilmController {
         if (film.getDescription().length() > 200 || film.getDescription().length() == 0) {
             throw new ValidationException("Описание фильма не может быть больше 200 символов");
         }
-        log.info("Вызов метода обновления фильма", film);
-        if (filmService.getAllFilm().containsKey(film.getId())) {
-            filmService.updateFilm(film);
-        } else {
-            throw new ValidationException("Нет фильма для обновления");
-        }
+        filmService.updateFilm(film);
         return film;
     }
 
