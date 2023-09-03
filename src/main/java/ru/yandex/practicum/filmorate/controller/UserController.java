@@ -10,7 +10,6 @@ import ru.yandex.practicum.filmorate.service.UserService;
 import jakarta.validation.Valid;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 
