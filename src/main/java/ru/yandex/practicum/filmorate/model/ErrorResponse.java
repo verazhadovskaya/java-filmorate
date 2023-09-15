@@ -8,6 +8,13 @@ import lombok.experimental.Accessors;
 @Setter
 @Accessors(chain = true)
 public class ErrorResponse {
-    private String message;
-    private int code;
+    private final String error;
+
+    public ErrorResponse(String error) {
+        this.error = error;
+    }
+
+    public String getError() {
+        return error;
+    }
 }
