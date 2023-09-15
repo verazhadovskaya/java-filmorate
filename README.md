@@ -13,7 +13,8 @@
 ```
 
 2. Для получения всех друзей пользователя c ID = 1
-  ` SELECT u.friend_id
+```sql
+ SELECT u.friend_id
    FROM users u
    INNER JOIN friend_request fr ON u.id=fr.user_id
    INNER JOIN request_status rf ON fr.request_status_id=rf.id AND rf.request_status= 'подтверждённая'
@@ -23,7 +24,8 @@
    FROM users u
    INNER JOIN friend_request fr ON u.id=fr.friend_id
    INNER JOIN request_status rf ON fr.request_status_id=rf.id AND rf.request_status= 'подтверждённая'
-   WHERE friend_id = 1` 
+   WHERE friend_id = 1
+```
 
 > [!NOTE]
 > Предполагаю, что в таблицу friend_request будет поступать инсерт в случае когда пользователь A отправил запрос на добавления в друзья пользователю B
@@ -31,14 +33,18 @@
 > Поэтому делаем union
 
 3. Для получения фильма по ИД
-   `SELECT *
+   ```sql
+   SELECT *
    FROM films
-   WHERE id = 1`
+   WHERE id = 1
+   ```
 
 4. Для получения списка пользователей, которые поставили лайк фильму с ИД = 1
-   `SELECT *
+   ```sql
+   SELECT *
    FROM films f
    INNER JOIN  film_likes fl ON f.id= fl.film_id
    INNER JOIN users u ON fl.user_id = u.id
-   WHERE f.id= 1`
+   WHERE f.id= 1
+   ```
 
