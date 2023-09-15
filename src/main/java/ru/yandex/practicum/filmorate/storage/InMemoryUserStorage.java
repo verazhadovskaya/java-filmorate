@@ -94,17 +94,21 @@ public class InMemoryUserStorage implements UserStorage {
     public List<User> getListCommonFriends(Long firstUserId, Long secondUserId) {
         User user = users.get(firstUserId);
         User secondUser = users.get(secondUserId);
-        Set<Long> setFriendsUser1 = user.getFriends();
-        Set<Long> setFriendsUser2 = secondUser.getFriends();
-        Set<Long> setCommonFriend = new HashSet<>();
-        setCommonFriend.clear();
-        setCommonFriend.addAll(setFriendsUser1);
-        setCommonFriend.retainAll(setFriendsUser2);
-        List<User> listFriends = new ArrayList<>();
-        for (Long friend : setCommonFriend) {
-            listFriends.add(users.get(friend));
+        if (user.getFriends() == null || secondUser.getFriends() == null) {
+            return new ArrayList<>();
+        } else {
+            Set<Long> setFriendsUser1 = user.getFriends();
+            Set<Long> setFriendsUser2 = secondUser.getFriends();
+            Set<Long> setCommonFriend = new HashSet<>();
+            setCommonFriend.clear();
+            setCommonFriend.addAll(setFriendsUser1);
+            setCommonFriend.retainAll(setFriendsUser2);
+            List<User> listFriends = new ArrayList<>();
+            for (Long friend : setCommonFriend) {
+                listFriends.add(users.get(friend));
+            }
+            return listFriends;
         }
-        return listFriends;
     }
 
     @Override

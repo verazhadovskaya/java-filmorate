@@ -11,6 +11,12 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 public class InMemoryFilmStorage implements FilmStorage {
+    private final UserStorage userStorage;
+
+    public InMemoryFilmStorage(UserStorage userStorage) {
+        this.userStorage = userStorage;
+    }
+
     private final Map<Long, Film> films = new HashMap<>();
     private long nextId = 1;
 
@@ -58,7 +64,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public void deleteLike(Long filmId, Long userId) {
         log.info("Вызов метода удаления лайка из фильма");
-        if (films.containsKey(filmId)) {
+        if (films.containsKey(filmId) && userStorage.getUserById(userId) != null) {
             Film film = films.get(filmId);
             Set<Long> likes = new HashSet<Long>();
             if (film.getLikes() != null) {
@@ -67,7 +73,7 @@ public class InMemoryFilmStorage implements FilmStorage {
             likes.remove(userId);
             film.setLikes(likes);
         } else {
-            throw new ObjectNotFoundException("Нет фильма с переданным ИД");
+            throw new ObjectNotFoundException("Нет фильма или пользователя с переданным ИД");
         }
     }
 
