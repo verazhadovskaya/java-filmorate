@@ -1,38 +1,43 @@
 package ru.yandex.practicum.filmorate.service;
 
-import lombok.extern.slf4j.Slf4j;
-import ru.yandex.practicum.filmorate.ValidationException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-@Slf4j
+@Service
+@RequiredArgsConstructor
 public class FilmService {
-    private final Map<Long, Film> films = new HashMap<>();
-    private long nextId = 1;
+    private final FilmStorage filmStorage;
 
     public Film saveFilm(Film film) {
-        log.info("Вызов метода сохранения фильма", film);
-        film.setId(nextId++);
-        films.put(film.getId(), film);
-        return film;
+        return filmStorage.saveFilm(film);
     }
 
     public Film updateFilm(Film film) {
-        log.info("Вызов метода обновления фильма", film);
-        if (films.containsKey(film.getId())) {
-            films.put(film.getId(), film);
-        } else {
-            throw new ValidationException("Нет фильма для обновления");
-        }
-        return film;
+        return filmStorage.updateFilm(film);
     }
 
     public List<Film> getAllFilm() {
-        log.info("Вызов метода получения всех фильмов. Текущее количество: {}", films.size());
-        return new ArrayList<>(films.values());
+        return filmStorage.getAllFilm();
+    }
+
+
+    public void addLike(Long filmId, Long userId) {
+        filmStorage.saveLike(filmId, userId);
+    }
+
+    public void deleteLike(Long filmId, Long userId) {
+        filmStorage.deleteLike(filmId, userId);
+    }
+
+    public List<Film> getTopFilms(int count) {
+        return filmStorage.getTopFilms(count);
+    }
+
+    public Film getFilmById(Long id) {
+        return filmStorage.getFilmById(id);
     }
 }

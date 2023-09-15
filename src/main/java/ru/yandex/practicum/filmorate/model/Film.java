@@ -7,6 +7,7 @@ import lombok.ToString;
 
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Data
 @ToString
@@ -21,4 +22,5 @@ public class Film {
     private LocalDate releaseDate;
     @Min(0)
     private int duration;
+    private Set<Long> likes;
 }
