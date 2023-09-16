@@ -18,7 +18,7 @@ public class InMemoryUserStorage implements UserStorage {
     public User saveUser(User user) {
         log.info("Вызов метода сохранения пользователя", user);
         user.setId(nextId++);
-        if (StringUtils.hasText(user.getName())) {
+        if (!StringUtils.hasText(user.getName())) {
             user.setName(user.getLogin());
         }
         users.put(user.getId(), user);
@@ -29,7 +29,7 @@ public class InMemoryUserStorage implements UserStorage {
     public User updateUser(User user) {
         log.info("Вызов метода обновления пользователя", user);
         if (users.containsKey(user.getId())) {
-            if (StringUtils.hasText(user.getName())) {
+            if (!StringUtils.hasText(user.getName())) {
                 user.setName(user.getLogin());
             }
             users.put(user.getId(), user);
