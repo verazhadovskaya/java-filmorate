@@ -86,10 +86,7 @@ public class FilmController {
 
     @ResponseBody
     @GetMapping("/popular")
-    public List<Film> getTopFilms(@RequestParam(required = false) Integer count) {
-        if (count == null) {
-            count = 10;
-        }
+    public List<Film> getTopFilms(@RequestParam(required = false, defaultValue = "10") Integer count) {
         return filmService.getTopFilms(count);
     }
 

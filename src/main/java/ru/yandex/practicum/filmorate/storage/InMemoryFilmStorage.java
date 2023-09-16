@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.storage;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.ObjectNotFoundException;
@@ -10,13 +11,9 @@ import java.util.stream.Collectors;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class InMemoryFilmStorage implements FilmStorage {
     private final UserStorage userStorage;
-
-    public InMemoryFilmStorage(UserStorage userStorage) {
-        this.userStorage = userStorage;
-    }
-
     private final Map<Long, Film> films = new HashMap<>();
     private long nextId = 1;
 
@@ -47,7 +44,7 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public void saveLike(Long filmId, Long userId) {
-        log.info("Вызов метода добавления лайка в фильм");
+        log.info("Вызов метода добавления лайка в фильм, filmId = {}, userId = {}", filmId, userId);
         if (films.containsKey(filmId)) {
             Film film = films.get(filmId);
             Set<Long> likes = new HashSet<Long>();
@@ -63,7 +60,7 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public void deleteLike(Long filmId, Long userId) {
-        log.info("Вызов метода удаления лайка из фильма");
+        log.info("Вызов метода удаления лайка из фильма, filmId = {}, userId = {}", filmId, userId);
         if (films.containsKey(filmId) && userStorage.getUserById(userId) != null) {
             Film film = films.get(filmId);
             Set<Long> likes = new HashSet<Long>();
@@ -79,7 +76,7 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public List<Film> getTopFilms(int count) {
-        log.info("Вызов метода получения ТОП фильмов");
+        log.info("Вызов метода получения ТОП count = {} фильмов", count);
         return films.values()
                 .stream()
                 .sorted(Comparator.comparing(film -> film.getLikes().size(), Comparator.reverseOrder()))
@@ -89,6 +86,7 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public Film getFilmById(Long id) {
+        log.info("Вызов метода получения фильма по ИД, id = {}", id);
         if (films.get(id) != null) {
             return films.get(id);
         } else {

@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.storage;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import ru.yandex.practicum.filmorate.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
@@ -17,7 +18,7 @@ public class InMemoryUserStorage implements UserStorage {
     public User saveUser(User user) {
         log.info("Вызов метода сохранения пользователя", user);
         user.setId(nextId++);
-        if (user.getName() == null || user.getName() == "") {
+        if (StringUtils.hasText(user.getName())) {
             user.setName(user.getLogin());
         }
         users.put(user.getId(), user);
@@ -28,7 +29,7 @@ public class InMemoryUserStorage implements UserStorage {
     public User updateUser(User user) {
         log.info("Вызов метода обновления пользователя", user);
         if (users.containsKey(user.getId())) {
-            if (user.getName() == null) {
+            if (StringUtils.hasText(user.getName())) {
                 user.setName(user.getLogin());
             }
             users.put(user.getId(), user);
@@ -46,7 +47,7 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User getUserById(Long id) {
-        log.info("Вызов метода получения пользователя по ИД");
+        log.info("Вызов метода получения пользователя по ИД = {}", id);
         if (users.containsKey(id)) {
             return users.get(id);
         } else {
@@ -56,7 +57,7 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public void saveFriend(Long firstUserId, Long secondUserId) {
-        log.info("Вызов метода добавления пользователя в друзья");
+        log.info("Вызов метода добавления  пользователя в друзья, firstUserId = {}, secondUserId = {}", firstUserId, secondUserId);
         if (users.containsKey(firstUserId) && users.containsKey(secondUserId)) {
             User user = users.get(firstUserId);
             Set<Long> userFriend = new HashSet<Long>();
@@ -72,7 +73,7 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public void deleteFriend(Long firstUserId, Long secondUserId) {
-        log.info("Вызов метода удаления пользователя из друзей");
+        log.info("Вызов метода удаления пользователя из друзей, firstUserId = {}, secondUserId = {}", firstUserId, secondUserId);
         if (users.containsKey(firstUserId) && users.containsKey(secondUserId)) {
             User user = users.get(firstUserId);
             Set<Long> userFriend = new HashSet<Long>();
@@ -92,6 +93,7 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public List<User> getListCommonFriends(Long firstUserId, Long secondUserId) {
+        log.info("Вызов метода получения общих друзей двух пользователей, firstUserId = {}, secondUserId = {}", firstUserId, secondUserId);
         User user = users.get(firstUserId);
         User secondUser = users.get(secondUserId);
         if (user.getFriends() == null || secondUser.getFriends() == null) {
@@ -113,6 +115,7 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public List<User> getFriends(Long userId) {
+        log.info("Вызов метода получения списка друзей пользователя, userId = {}", userId);
         User user = users.get(userId);
         Set<Long> setFriends = user.getFriends();
         List<User> listFriends = new ArrayList<>();
