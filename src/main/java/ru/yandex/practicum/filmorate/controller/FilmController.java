@@ -1,7 +1,9 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -15,9 +17,11 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/films")
+@RequiredArgsConstructor
 public class FilmController {
 
-    private final FilmService filmService = new FilmService();
+    @Autowired
+    private final FilmService filmService;
 
     //получение всех фильмов
     @ResponseBody
@@ -67,5 +71,29 @@ public class FilmController {
         filmService.updateFilm(film);
         return film;
     }
+
+    @ResponseBody
+    @PutMapping("/{id}/like/{userId}")
+    public void addLike(@PathVariable("id") Long filmId, @PathVariable("userId") Long userId) {
+        filmService.addLike(filmId, userId);
+    }
+
+    @ResponseBody
+    @DeleteMapping("/{id}/like/{userId}")
+    public void deleteLike(@PathVariable("id") Long filmId, @PathVariable("userId") Long userId) {
+        filmService.deleteLike(filmId, userId);
+    }
+
+    @ResponseBody
+    @GetMapping("/popular")
+    public List<Film> getTopFilms(@RequestParam(required = false, defaultValue = "10") Integer count) {
+        return filmService.getTopFilms(count);
+    }
+
+    @GetMapping("/{id}")
+    public Film get(@PathVariable("id") long id) {
+        return filmService.getFilmById(id);
+    }
+
 
 }
