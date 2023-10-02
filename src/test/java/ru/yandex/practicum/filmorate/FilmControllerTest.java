@@ -10,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.controller.FilmController;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Mpa;
-import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.storage.*;
 
 import java.time.LocalDate;
@@ -21,11 +20,8 @@ import java.util.HashSet;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class FilmControllerTest {
 
-    private UserDbStorage userStorage;
-    private MpaDbStorage mpaDbStorage;
-    private FilmDbStorage filmStorage;
-    private FilmService filmService;
-    private FilmController filmController;
+    private final FilmDbStorage filmStorage;
+    private final FilmController filmController;
 
     Film film = new Film();
 
@@ -42,23 +38,22 @@ public class FilmControllerTest {
         film.setMpa(mpa);
         film.setGenres(new HashSet<>());
         film.setLikes(new HashSet<>());
+        filmStorage.deleteAllFilm();
     }
 
 
     @Test
     void createFilmValidField() {
-        System.out.println(film);
         filmStorage.saveFilm(film);
-
-        Assertions.assertFalse(filmService.getAllFilm().isEmpty());
+        Assertions.assertEquals(1, filmStorage.getAllFilm().size());
     }
 
     @Test
     void updateFilmValidField() {
-        filmController.create(film);
-        filmController.update(film);
+        filmStorage.saveFilm(film);
+        filmStorage.updateFilm(film);
 
-        Assertions.assertEquals(1, filmController.getFilm().size());
+        Assertions.assertEquals(1, filmStorage.getAllFilm().size());
     }
 
 
@@ -67,7 +62,7 @@ public class FilmControllerTest {
         film.setName("");
 
         Assertions.assertThrows(ValidationException.class, () -> filmController.create(film));
-        Assertions.assertEquals(0, filmController.getFilm().size());
+        Assertions.assertEquals(0, filmStorage.getAllFilm().size());
     }
 
     @Test
@@ -79,7 +74,7 @@ public class FilmControllerTest {
                 "Очень длинное описание. \n");
 
         Assertions.assertThrows(ValidationException.class, () -> filmController.create(film));
-        Assertions.assertEquals(0, filmController.getFilm().size());
+        Assertions.assertEquals(0, filmStorage.getAllFilm().size());
     }
 
     @Test
@@ -88,9 +83,9 @@ public class FilmControllerTest {
                 "Описание ровно в 200 символов. Описание ровно в 200 символов. " +
                 "Описание ровно в 200 символов. Описание ровно в 200 символов." +
                 " Описание ровно в 200 символов. Описание ровн\n");
-        filmController.create(film);
+        filmStorage.saveFilm(film);
 
-        Assertions.assertEquals(1, filmController.getFilm().size());
+        Assertions.assertEquals(1, filmStorage.getAllFilm().size());
     }
 
     @Test
@@ -99,9 +94,9 @@ public class FilmControllerTest {
                 "Описание 199 символов. Описание 199 символов. Описание 199 символов. " +
                 "Описание 199 символов. Описание 199 символов. Описание 199 символов." +
                 " Описание 199 си");
-        filmController.create(film);
+        filmStorage.saveFilm(film);
 
-        Assertions.assertEquals(1, filmController.getFilm().size());
+        Assertions.assertEquals(1, filmStorage.getAllFilm().size());
     }
 
     @Test
@@ -112,7 +107,7 @@ public class FilmControllerTest {
                 "Описание 201 символ. Описание 201 символ. Описание 201\n");
 
         Assertions.assertThrows(ValidationException.class, () -> filmController.create(film));
-        Assertions.assertEquals(0, filmController.getFilm().size());
+        Assertions.assertEquals(0, filmStorage.getAllFilm().size());
     }
 
     @Test
@@ -121,7 +116,7 @@ public class FilmControllerTest {
 
 
         Assertions.assertThrows(ValidationException.class, () -> filmController.create(film));
-        Assertions.assertEquals(0, filmController.getFilm().size());
+        Assertions.assertEquals(0, filmStorage.getAllFilm().size());
     }
 
     @Test
@@ -130,23 +125,23 @@ public class FilmControllerTest {
 
 
         Assertions.assertThrows(ValidationException.class, () -> filmController.create(film));
-        Assertions.assertEquals(0, filmController.getFilm().size());
+        Assertions.assertEquals(0, filmStorage.getAllFilm().size());
     }
 
     @Test
     void createUserNotValidBirthdayBorderDay() {
         film.setReleaseDate(LocalDate.of(1895, 12, 28));
-        filmController.create(film);
+        filmStorage.saveFilm(film);
 
-        Assertions.assertEquals(1, filmController.getFilm().size());
+        Assertions.assertEquals(1, filmStorage.getAllFilm().size());
     }
 
     @Test
     void createUserNotValidBirthdayBorderPlusDay() {
         film.setReleaseDate(LocalDate.of(1895, 12, 29));
-        filmController.create(film);
+        filmStorage.saveFilm(film);
 
-        Assertions.assertEquals(1, filmController.getFilm().size());
+        Assertions.assertEquals(1, filmStorage.getAllFilm().size());
     }
 
     @Test
@@ -154,6 +149,6 @@ public class FilmControllerTest {
         film.setDuration(-1);
 
         Assertions.assertThrows(ValidationException.class, () -> filmController.create(film));
-        Assertions.assertEquals(0, filmController.getFilm().size());
+        Assertions.assertEquals(0, filmStorage.getAllFilm().size());
     }
 }

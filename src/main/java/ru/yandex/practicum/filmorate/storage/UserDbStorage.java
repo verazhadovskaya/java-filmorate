@@ -33,6 +33,7 @@ public class UserDbStorage implements UserStorage {
             "inner join friend_request fr on u.id=fr.friend_id where fr.user_id = ?) a " +
             "inner join (select u.* from users u inner join friend_request fr " +
             "on u.id=fr.friend_id where fr.user_id = ? ) b on a.id= b.id";
+    private static final String DELETE_ALL_USER_QUERY = "delete from users";
 
     private final JdbcTemplate jdbcTemplate;
     private final UserRowMapper userRowMapper;
@@ -125,5 +126,7 @@ public class UserDbStorage implements UserStorage {
         return jdbcTemplate.query(SELECT_LIST_FRIEND_QUERY, ps -> ps.setLong(1, userId), userRowMapper);
     }
 
-
+    public void deleteAllUser() {
+        jdbcTemplate.update(DELETE_ALL_USER_QUERY);
+    }
 }

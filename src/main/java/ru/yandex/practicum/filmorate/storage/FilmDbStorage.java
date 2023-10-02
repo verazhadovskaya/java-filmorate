@@ -43,6 +43,7 @@ public class FilmDbStorage implements FilmStorage {
     private static final String DELETE_LIKE_QUERY = "delete from film_likes where film_id =?";
     private static final String INSERT_FILM_GENRE_QUERY = "insert into film_genre (id, film_id, genre_id) values (nextval('film_genre_seq'),?,?)";
     private static final String DELETE_FILM_GENRE_QUERY = "delete from film_genre where film_id = ?";
+    private static final String DELETE_ALL_FILM_QUERY = "delete from films";
 
     private final JdbcTemplate jdbcTemplate;
     private final FilmRowMapper filmRowMapper;
@@ -159,5 +160,9 @@ public class FilmDbStorage implements FilmStorage {
         } else {
             throw new ObjectNotFoundException("Нет фильма с таким ИД");
         }
+    }
+
+    public void deleteAllFilm() {
+        jdbcTemplate.update(DELETE_ALL_FILM_QUERY);
     }
 }

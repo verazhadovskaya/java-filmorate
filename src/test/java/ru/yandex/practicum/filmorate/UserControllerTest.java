@@ -9,9 +9,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.controller.UserController;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.service.UserService;
-import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
-import ru.yandex.practicum.filmorate.storage.UserStorage;
+import ru.yandex.practicum.filmorate.storage.UserDbStorage;
 
 import java.time.LocalDate;
 
@@ -19,9 +17,8 @@ import java.time.LocalDate;
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class UserControllerTest {
-    private UserStorage userStorage = new InMemoryUserStorage();
-    private UserService userService = new UserService(userStorage);
-    private UserController userController = new UserController(userService);
+    private final UserDbStorage userStorage;
+    private final UserController userController;
     User user = new User();
 
     @BeforeEach
@@ -30,20 +27,21 @@ public class UserControllerTest {
         user.setLogin("login");
         user.setName("name");
         user.setBirthday(LocalDate.of(1990, 1, 1));
+        userStorage.deleteAllUser();
     }
 
     @Test
     void createUserValidField() {
-        userController.create(user);
-        Assertions.assertEquals(1, userController.getUsers().size());
+        userStorage.saveUser(user);
+        Assertions.assertEquals(1, userStorage.getAllUser().size());
     }
 
     @Test
     void updateUserValidField() {
-        userController.create(user);
-        userController.update(user);
+        userStorage.saveUser(user);
+        userStorage.updateUser(user);
 
-        Assertions.assertEquals(1, userController.getUsers().size());
+        Assertions.assertEquals(1, userStorage.getAllUser().size());
     }
 
     @Test
@@ -51,7 +49,7 @@ public class UserControllerTest {
         user.setEmail("testtest.ru");
 
         Assertions.assertThrows(ValidationException.class, () -> userController.create(user));
-        Assertions.assertEquals(0, userController.getUsers().size());
+        Assertions.assertEquals(0, userStorage.getAllUser().size());
     }
 
     @Test
@@ -59,7 +57,7 @@ public class UserControllerTest {
         user.setLogin("");
 
         Assertions.assertThrows(ValidationException.class, () -> userController.create(user));
-        Assertions.assertEquals(0, userController.getUsers().size());
+        Assertions.assertEquals(0, userStorage.getAllUser().size());
     }
 
     @Test
@@ -67,7 +65,7 @@ public class UserControllerTest {
         user.setBirthday(LocalDate.of(2099, 1, 1));
 
         Assertions.assertThrows(ValidationException.class, () -> userController.create(user));
-        Assertions.assertEquals(0, userController.getUsers().size());
+        Assertions.assertEquals(0, userStorage.getAllUser().size());
     }
 
     @Test
@@ -75,31 +73,31 @@ public class UserControllerTest {
         user.setBirthday(LocalDate.now().plusDays(1));
 
         Assertions.assertThrows(ValidationException.class, () -> userController.create(user));
-        Assertions.assertEquals(0, userController.getUsers().size());
+        Assertions.assertEquals(0, userStorage.getAllUser().size());
     }
 
     @Test
     void createUserValidBirthdayNowMinusDay() {
         user.setBirthday(LocalDate.now().minusDays(1));
-        userController.create(user);
+        userStorage.saveUser(user);
 
-        Assertions.assertEquals(1, userController.getUsers().size());
+        Assertions.assertEquals(1, userStorage.getAllUser().size());
     }
 
     @Test
     void createUserValidBirthdayNow() {
         user.setBirthday(LocalDate.now());
-        userController.create(user);
+        userStorage.saveUser(user);
 
-        Assertions.assertEquals(1, userController.getUsers().size());
+        Assertions.assertEquals(1, userStorage.getAllUser().size());
     }
 
     @Test
     void createEmptyName() {
         user.setName(null);
-        userController.create(user);
+        userStorage.saveUser(user);
 
         Assertions.assertEquals(user.getName(), user.getLogin());
-        Assertions.assertEquals(1, userController.getUsers().size());
+        Assertions.assertEquals(1, userStorage.getAllUser().size());
     }
 }
