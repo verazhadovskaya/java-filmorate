@@ -1,8 +1,9 @@
 package ru.yandex.practicum.filmorate.model;
 
 import jakarta.validation.constraints.*;
-import lombok.Data;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
@@ -11,7 +12,8 @@ import java.time.LocalDate;
 import java.util.*;
 
 
-@Data
+@Setter
+@Getter
 @ToString
 @Accessors(chain = true)
 public class Film {

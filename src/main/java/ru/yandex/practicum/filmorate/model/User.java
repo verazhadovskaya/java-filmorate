@@ -1,7 +1,8 @@
 package ru.yandex.practicum.filmorate.model;
 
 import jakarta.validation.constraints.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
@@ -9,10 +10,10 @@ import lombok.experimental.Accessors;
 import java.time.LocalDate;
 import java.util.Set;
 
-@Data
+@Setter
+@Getter
 @ToString
 @Accessors(chain = true)
-//@AllArgsConstructor
 public class User {
     private Long id;
     @Email
