@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 import ru.yandex.practicum.filmorate.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
+
 import java.util.List;
 
 @Repository
@@ -23,7 +24,7 @@ public class UserDbStorage implements UserStorage {
     private static final String SELECT_LIST_FRIEND_QUERY = "select u.* from users u " +
             "inner join friend_request fr on  u.id=fr.friend_id " +
             "where fr.user_id= ?";                //так как в тестах нет подтверждения,
-                                                    // то убрала условие and request_status_id=2
+    // то убрала условие and request_status_id=2
     private static final String APPROVE_FRIEND_QUERY = "update friend_request set request_status_id=2 " +
             "where user_id = ? and friend_id=?";
     private static final String DELETE_FRIEND_QUERY = "delete from friend_request " +
@@ -68,12 +69,12 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public User getUserById(Long id) {
-        User user= jdbcTemplate
+        User user = jdbcTemplate
                 .query(SELECT_USER_QUERY_BY_ID, ps -> ps.setLong(1, id), userRowMapper)
                 .stream()
                 .findFirst()
                 .orElse(null);
-        if (user!=null) {
+        if (user != null) {
             return user;
         } else {
             throw new ObjectNotFoundException("Нет пользователя с таким ИД");

@@ -8,7 +8,6 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -82,7 +81,7 @@ public class FilmDbStorage implements FilmStorage {
             List<Genre> listGenres = new ArrayList<>();
             Set<Genre> setGenres = new HashSet<>();
             listGenres = jdbcTemplate.query(SELECT_FILM_GENRE_QUERY, ps -> ps.setLong(1, film.getId()), genreRowMapper);
-            if (listGenres.get(0).getId()!=0) {
+            if (listGenres.get(0).getId() != 0) {
                 for (Genre oneGenre : listGenres) {
                     setGenres.add(oneGenre);
                 }
@@ -103,7 +102,7 @@ public class FilmDbStorage implements FilmStorage {
             List<Genre> listGenres = new ArrayList<>();
             Set<Genre> genres = new HashSet<>();
             listGenres = jdbcTemplate.query(SELECT_FILM_GENRE_QUERY, ps -> ps.setLong(1, film.getId()), genreRowMapper);
-            if (listGenres.get(0).getId()!=0) {
+            if (listGenres.get(0).getId() != 0) {
                 for (Genre oneGenre : listGenres) {
                     genres.add(oneGenre);
                 }
@@ -148,7 +147,7 @@ public class FilmDbStorage implements FilmStorage {
         List<Genre> listGenres = new ArrayList<>();
         if (film != null) {
             listGenres = jdbcTemplate.query(SELECT_FILM_GENRE_QUERY, ps -> ps.setLong(1, film.getId()), genreRowMapper);
-            if (listGenres.get(0).getId()!=0) {
+            if (listGenres.get(0).getId() != 0) {
                 for (Genre oneGenre : listGenres) {
                     genres.add(oneGenre);
                 }
