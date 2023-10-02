@@ -77,6 +77,12 @@ public class UserController {
     }
 
     @ResponseBody
+    @PutMapping("/{id}/friends/{friendId}/approve")
+    public void approveFriends(@PathVariable("id") Long id, @PathVariable("friendId") Long friendId) {
+        userService.approveFriend(id, friendId);
+    }
+
+    @ResponseBody
     @DeleteMapping("/{id}/friends/{friendId}")
     public void deleteFriends(@PathVariable("id") Long id, @PathVariable("friendId") Long friendId) {
         userService.deleteFriend(id, friendId);

@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
@@ -10,6 +11,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
+    @Qualifier("userDbStorage")
     private final UserStorage userStorage;
 
     public User saveUser(User user) {
@@ -30,13 +33,16 @@ public class UserService {
 
     public void addFriend(Long firstUserId, Long secondUserId) {
         userStorage.saveFriend(firstUserId, secondUserId);
-        userStorage.saveFriend(secondUserId, firstUserId);
     }
 
     public void deleteFriend(Long firstUserId, Long secondUserId) {
         userStorage.deleteFriend(firstUserId, secondUserId);
-        userStorage.deleteFriend(secondUserId, firstUserId);
     }
+
+    public void approveFriend(Long firstUserId, Long secondUserId) {
+        userStorage.approveFriend(firstUserId, secondUserId);
+    }
+
 
     public List<User> getListCommonFriends(Long userId, Long secondUserId) {
         return userStorage.getListCommonFriends(userId, secondUserId);

@@ -4,14 +4,16 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+
 
 @Data
 @ToString
+@Accessors(chain = true)
 public class Film {
     private Long id;
     @NotEmpty
@@ -23,5 +25,7 @@ public class Film {
     private LocalDate releaseDate;
     @Min(0)
     private int duration;
+    private Mpa mpa;
+    private Set<Genre> genres;
     private Set<Long> likes = new HashSet<>();
 }

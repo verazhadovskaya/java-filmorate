@@ -4,42 +4,56 @@ import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.controller.FilmController;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.service.FilmService;
-import ru.yandex.practicum.filmorate.storage.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
-import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
-import ru.yandex.practicum.filmorate.storage.UserStorage;
+import ru.yandex.practicum.filmorate.storage.*;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 @SpringBootTest
-@RequiredArgsConstructor
+@AutoConfigureTestDatabase
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class FilmControllerTest {
 
-    private UserStorage userStorage = new InMemoryUserStorage();
-    private FilmStorage filmStorage = new InMemoryFilmStorage(userStorage);
-    private FilmService filmService = new FilmService(filmStorage);
-    private FilmController filmController = new FilmController(filmService);
+    private UserDbStorage userStorage;
+    private MpaDbStorage mpaDbStorage;
+    private FilmDbStorage filmStorage;
+    private FilmService filmService;
+    private FilmController filmController;
 
     Film film = new Film();
 
     @BeforeEach
     void createFilm() {
+        Mpa mpa = new Mpa();
+        mpa.setId(1);
+        mpa.setName("test");
+        film.setId(1L);
         film.setName("name");
         film.setDescription("description");
         film.setReleaseDate(LocalDate.of(2000, 1, 1));
         film.setDuration(120);
+        film.setMpa(mpa);
+        film.setGenres(new HashSet<>());
+        film.setLikes(new HashSet<>());
     }
 
 
     @Test
     void createFilmValidField() {
-        filmController.create(film);
+        System.out.println(film);
+        filmStorage.saveFilm(film);
 
-        Assertions.assertEquals(1, filmController.getFilm().size());
+        Assertions.assertFalse(filmService.getAllFilm().isEmpty());
     }
 
     @Test
