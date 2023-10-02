@@ -88,7 +88,7 @@ public class FilmDbStorage implements FilmStorage {
                 for (Genre oneGenre : listGenres) {
                     setGenres.add(oneGenre);
                 }
-                setGenres=setGenres.stream()
+                setGenres = setGenres.stream()
                         .collect(Collectors.toSet());
                 film.setGenres(setGenres);
             }
@@ -111,7 +111,7 @@ public class FilmDbStorage implements FilmStorage {
                 for (Genre oneGenre : listGenres) {
                     genres.add(oneGenre);
                 }
-                genres=genres.stream()
+                genres = genres.stream()
                         .collect(Collectors.toSet());
                 film.setGenres(genres);
             }
@@ -158,7 +158,7 @@ public class FilmDbStorage implements FilmStorage {
                 for (Genre oneGenre : listGenres) {
                     genres.add(oneGenre);
                 }
-                genres=genres.stream()
+                genres = genres.stream()
                         .collect(Collectors.toSet());
                 film.setGenres(genres);
             }
