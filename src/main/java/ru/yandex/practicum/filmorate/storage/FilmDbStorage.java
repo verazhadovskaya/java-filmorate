@@ -7,7 +7,9 @@ import ru.yandex.practicum.filmorate.ObjectNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 
+
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -86,6 +88,8 @@ public class FilmDbStorage implements FilmStorage {
                 for (Genre oneGenre : listGenres) {
                     setGenres.add(oneGenre);
                 }
+                setGenres=setGenres.stream()
+                        .collect(Collectors.toSet());
                 film.setGenres(setGenres);
             }
         } else {
@@ -107,6 +111,8 @@ public class FilmDbStorage implements FilmStorage {
                 for (Genre oneGenre : listGenres) {
                     genres.add(oneGenre);
                 }
+                genres=genres.stream()
+                        .collect(Collectors.toSet());
                 film.setGenres(genres);
             }
             wholeFilms.add(film);
@@ -152,6 +158,8 @@ public class FilmDbStorage implements FilmStorage {
                 for (Genre oneGenre : listGenres) {
                     genres.add(oneGenre);
                 }
+                genres=genres.stream()
+                        .collect(Collectors.toSet());
                 film.setGenres(genres);
             }
         }
