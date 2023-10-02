@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import ru.yandex.practicum.filmorate.ValidationException;
@@ -20,8 +19,6 @@ import java.util.List;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
-
-    @Autowired
     private final UserService userService;
 
     //получение всех пользователей
@@ -74,6 +71,12 @@ public class UserController {
     @PutMapping("/{id}/friends/{friendId}")
     public void addFriends(@PathVariable("id") Long id, @PathVariable("friendId") Long friendId) {
         userService.addFriend(id, friendId);
+    }
+
+    @ResponseBody
+    @PutMapping("/{id}/friends/{friendId}/approve")
+    public void approveFriends(@PathVariable("id") Long id, @PathVariable("friendId") Long friendId) {
+        userService.approveFriend(id, friendId);
     }
 
     @ResponseBody
